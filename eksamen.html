@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <style>
+
+        body{
+            font-family: Baskerville;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        #info{
+            left: 20%;
+            position: relative;
+            top: 20px;
+        }
+
+
+
+        tr{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 200px;
+            left: 40%;
+            top: 150px;
+            position: relative;
+        }
+
+        a{
+            text-decoration: none;
+            color: black;
+
+        }
+
+
+
+
+
+    </style>
+
+
+</head>
+<body>
+
+<h1>Eksamens øving</h1>
+
+
+<div id="info">
+    <h2>Tidligere eksamener i IT2 består som regel av fire oppgaver, med følgende oppsett:</h2>
+
+    <div>
+        <li>Oppgave 1 er en multimediaoppgave, dvs. en animasjon, et slideshow, film eller lignende.</li>
+        <li>Oppgave 2 er noe som ligner en kalkulator (i dag)</li>
+        <li>Oppgave 3 er en større applikasjon av noe slag</li>
+        <li>Oppgave 4 er planlegging og dokumentasjon</li>
+
+    </div>
+
+
+    <div>
+        <h2>Typiske oppgave2-oppgaver</h2>
+        <h5>Må kunne:</h5>
+        <h4>HTML og CSS</h4>
+
+        <li>Tekst, overskrift</li>
+        <li>Input-elementer: https://www.w3schools.com/html/html_form_input_types.asp</li>
+        <li>Knapper</li>
+
+        <h4>javascript</h4>
+        <li>Enkle variabler og datatyper</li>
+        <li>Hente ut verdier fra input-elementene, eks: let vindstyrke = inpStyrke.value;</li>
+        <li>Hendelsesfunksjoner, eks: knapp.onclick = kalkulatorfunksjon;</li>
+        <li>If-setninger</li>
+        <li>Skrive HTML med javascript, eks: resultat.innerHTML = `<div>${vindtype}</div>`</li>
+        <li>Endre HTML-attributter med javascript, eks: bilde.src = "gratisMat.png";</li>
+        <li>Endre style (CSS) med javascript, eks: resultat.style.color = "red";</li>
+
+
+
+    </div>
+
+</div>
+
+
+<table id="tabell">
+    <tr>
+        <th>eksamensoppgaver</th>
+        <th>filer til oppgaven</th>
+        <th>løsningsforslag</th>
+    </tr>
+
+</table>
+
+
+
+<script>
+
+
+    //referere til HTML elementer
+    let tabell = document.querySelector("#tabell");
+    let bokstaver = ["a","b","c","d","e"];
+
+
+    //globale variabler
+
+    class Eksamen {
+        constructor(aar, aarstid ,eksamenPDF, zipfil, LF ){
+            this.aar = aar;
+            this.aarstid = aarstid;
+            this.eksamenPDF = eksamenPDF;
+            this.zipfil = zipfil;
+            this.LF = LF;
+        }
+        losningsforslag(){
+            let htmlLF = ``;
+            let n = 1;
+            for (let lf of this.LF){
+
+                //hvis det er et array i en av kommaene på arrayet er det flere versjoner av samme oppgave nr.
+                if (lf.constructor == Array) {
+
+                    //hvis arrayen inni løsningsforslag hovedarrayen har "romertall" først i arrayen skal de andre skrives med romertall bak
+                    if (lf[0] === "romertall") {
+                        let i = `I`;
+                        for (let k = 1; k < lf.length; k++) {
+                            htmlLF += `<a href="${lf[k]}"> oppgave ${n} ${i}</a><br>`;
+                            i += `I`
+                        }
+                    }
+                    else if (lf[0] === "bokstaver"){
+                        lf.shift();
+                        let m = 0;
+
+                        for (let lfbokstaver of lf){
+                            if (lfbokstaver[0] === "romertall") {
+                                lfbokstaver.shift();
+                                let l = `I`;
+                                for (let o = 0; o < lfbokstaver.length; o++) {
+                                    htmlLF += `<a href="${lfbokstaver[o]}"> oppgave ${n} ${bokstaver[m]} ${l}</a><br>`;
+                                    l += `I`
+                                }
+                            }
+                            else {
+                                htmlLF += `<a href="${lfbokstaver}"> oppgave ${n} ${bokstaver[m]}</a><br>`
+                            }
+                            m++;
+
+                }
+                    }
+                }
+
+                else{
+                    htmlLF += `<a href="${lf}"> oppgave ${n} </a><br>`
+                }
+                n++
+            }
+            return htmlLF;
+        }
+
+        skrivtabell(){
+            let lfs = this.losningsforslag();
+            tabell.innerHTML += `
+            <tr>
+                <td><a href="${this.eksamenPDF}">Eksamen ${this.aarstid} ${this.aar}</a></td>
+                <td><a href="${this.zipfil}">zip ${this.aarstid} ${this.aar}</a></td>
+                <td>${lfs}</td>
+            </tr>
+            `
+        }
+
+    }
+
+    //løsningsforslag legg abc deloppgaver i objekter med a,b,c som navn. legg alternative løsninger i arrayer
+
+    let losEXH10 = ["http://it2cha.com/eksamen/H2010-Hoteller/H2010%20Hoteller%20Oppgave%202.html"];
+    let losEXV10 = ["http://it2cha.com/eksamen/V2010-Fly/V-2010-Fly-Oppgave-1.html", "http://it2cha.com/eksamen/V2010-Fly/V-2010-Fly-Oppgave-2-visible.html"]
+    let losEXV13 = ["http://it2cha.com/eksamen/V2013-Energi/V%202013%20Energi%20oppgave%201.html", "http://it2cha.com/eksamen/V2013-Energi/V%202013%20Energi%20oppgave%202%20ab.html", ["romertall","http://it2cha.com/eksamen/V2013-Energi/V%202013%20Energi%20oppgave%203.html", "http://it2cha.com/eksamen/V2013-Energi/V%202013%20Energi%20oppgave%203%20-%20array%20II.html"], "http://it2cha.com/eksamen/V2013-Energi/V2013%20Energiforbruk%20Oppgave%204.pdf"];
+    let losEXH14 = [["romertall","http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%201-II.html", "http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%201-3.html"], "http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%202.html", "http://it2cha.com/eksamen/H%202014%20Biler/H2014%20Biler%20Oppgave%203.pdf", ["romertall","http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%204-lister-endim-array.html", "http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%204-lister-checkbox.html", "http://it2cha.com/eksamen/H%202014%20Biler/H%202014%20Biler%20Oppgave%204.html"]];
+    let losEXV14 = ["http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V%202014%20Trafikksikkerhet%20Oppgave%201.html", ["bokstaver",[ "romertall", "http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V2014%20Trafikksikkerhet%20Oppgave%202a-enkel-prompt.html", "http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V2014%20Trafikksikkerhet%20Oppgave%202a-array.html"], ["romertall","http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V2014%20Trafikksikkerhet%20Oppgave%202b-div.html", "http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V2014%20Trafikksikkerhet%20Oppgave%202b-canvas.html", "http://it2cha.com/eksamen/V%202014%20Trafikksikkerhet/V2014%20Trafikksikkerhet%20Oppgave%202b-div-Gl%C3%B8er.html"]]];
+    let losEXH15 = [""];
+    let losEXV15 = ["http://it2cha.com/eksamen/V2015%20Sykkelturer/V2015%20Sykkelturer%20Oppgave%201.html", "http://it2cha.com/eksamen/V2015%20Sykkelturer/V2015%20Sykkelturer%20Oppgave%202.html", ["bokstaver","http://it2cha.com/eksamen/V2015%20Sykkelturer/V2015%20Sykkelturer%20Oppgave%203.html", "http://it2cha.com/eksamen/V2015%20Sykkelturer/V2015%20Sykkeltur%20Oppgave%203b.jpg"]];
+    let losEXH16 = ["", "http://it2cha.com/eksamen/H%202016%20Matkasser/H%202016%20Matkasse%20Oppgave%202.html"]
+    let losEXV16 = [["romertall", "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Ferie%20Oppgave%201.html", "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Ferie%20Oppgave%201%20-%20Gl%C3%B8er.html"],["romertall", "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Ferie%20Oppgave%202ab-array.html", "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Feriereiser-Oppgave2b.pdf", "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Ferie%20Oppgave%202ab.html"], "http://it2cha.com/eksamen/V%202016%20Feriereiser/V2016%20Ferie%20Oppgave%203ab.html"];
+    let losEXV17 = ["http://it2cha.com/eksamen/V%202017%20Vind/V2017%20Vind%20Oppgave%201.html", "http://it2cha.com/eksamen/V%202017%20Vind/V2017%20Vind%20Oppgave%202.html", ["bokstaver", "http://it2cha.com/eksamen/V%202017%20Vind/V2017%20Vind%20Oppgave%203a.pdf", ["romertall", "http://it2cha.com/eksamen/V%202017%20Vind/V2017%20Vind%20Oppgave%203.html", "http://it2cha.com/eksamen/V%202017%20Vind/V2017%20Vind%20Oppgave%203-II.html"]]]
+    let losEXV18 = ["http://it2cha.com/eksamen/V%202018%20Museum/V2018%20Museum%20Oppgave%201.html", "http://it2cha.com/eksamen/V%202018%20Museum/V2018%20Museum%20Oppgave%202.html", "http://it2cha.com/eksamen/V%202018%20Museum/V2018%20Museum%20Oppgave%203.html"];
+
+
+
+
+    let EXH10 = new Eksamen("2010","høst","PDF/eks-10-h.pdf","zip/FilerH2010.zip", losEXH10);
+    let EXV10 = new Eksamen("2010","vår","PDF/eks-10-v.pdf","zip/FilerV2010.zip", losEXV10);
+    let EXV13 = new Eksamen("2013","vår","PDF/eks-13-v.pdf","zip/FilerV2013.zip", losEXV13);
+    let EXH14 = new Eksamen("2014","høst","PDF/eks-14-h.pdf","zip/FilerH2014.zip", losEXH14);
+    let EXV14 = new Eksamen("2014","vår","PDF/eks-14-v.pdf","zip/FilerV2014.zip", losEXV14);
+    let EXH15 = new Eksamen("2015","høst","PDF/eks-15-h.pdf","zip/FilerH2015.zip",losEXH15);
+    let EXV15 = new Eksamen("2015","vår","PDF/eks-15-v.pdf","zip/FilerV2015.zip", losEXV15);
+    let EXH16 = new Eksamen("2016","høst","PDF/eks-16-h.pdf","zip/FilerH2016.zip",losEXH16);
+    let EXV16 = new Eksamen("2016","vår","PDF/eks-16-v.pdf","zip/FilerV2016.zip",losEXV16);
+    let EXV17 = new Eksamen("2017","vår","PDF/eks-17-v.pdf","zip/FilerV2017.zip",losEXV17);
+    let EXV18 = new Eksamen("2018","vår","PDF/eks-18-v.pdf","zip/FilerV2018.zip",losEXV18);
+
+
+
+    let eksamener = [EXH10, EXV10, EXV13, EXH14, EXV14, EXH15, EXV15, EXH16, EXV16, EXV17, EXV18]
+
+    for (let eksamen of eksamener){
+        eksamen.skrivtabell();
+    }
+
+
+</script>
+
+</body>
+</html>
